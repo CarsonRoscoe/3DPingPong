@@ -34,7 +34,7 @@ namespace Assets.Scripts {
             HUDManager.Instance.UpdateScores();
         }
 
-        public void PlayerScore(int player) {
+        public void PlayerScored(int player) {
             var gameData = GameDataManager.Instance;
             switch ( player ) {
                 case 1:
@@ -66,6 +66,13 @@ namespace Assets.Scripts {
             HUDManager.Instance.StartGame();
         }
 
+        public void RestartGame() {
+            StartGame();
+            CenterPlayer( PlayerOne.gameObject );
+            CenterPlayer( PlayerTwo.gameObject );
+            ResetCourt( Ball.gameObject );
+        }
+
         public void EndGame(int winningPlayer) {
             ResetScores();
             GameDataManager.Instance.GameInProgress = false;
@@ -86,20 +93,16 @@ namespace Assets.Scripts {
 
                     ball.transform.position = new Vector3( newBallX, newBallY, newBallZ );
 
-
-                    var xForce = UnityEngine.Random.value >= .5 ? ballBehaviour.XForceSpeed : -ballBehaviour.XForceSpeed;
-                    var yForce = UnityEngine.Random.value * ballBehaviour.YZForceSpeed - ballBehaviour.YZForceSpeed / 2;
-                    var zForce = UnityEngine.Random.value * ballBehaviour.YZForceSpeed - ballBehaviour.YZForceSpeed / 2;
-
-                    if ( rigidBody != null ) {
-                        rigidBody.velocity = Vector3.zero;
-                        rigidBody.AddForce( xForce, yForce, zForce );
-                    }
+                    ballBehaviour.RandomizeForce();
                 }
             }
         }
 
         private void AddController(GameObject player, MovementType movementType) {
+            var playerMovement = player.GetComponent<BaseMovement>();
+            if ( playerMovement != null ) {
+                Destroy( playerMovement );
+            }
             switch ( movementType ) {
                 case MovementType.Controller:
                     break;
@@ -114,6 +117,13 @@ namespace Assets.Scripts {
                     AI.Ball = Ball;
                     break;
             }
+        }
+
+        private void CenterPlayer(GameObject player) {
+            var gameData = GameDataManager.Instance;
+            var newZ = gameData.MinimumCourtZ + gameData.CourtWidth / 2f;
+            var newY = gameData.MinimumCourtY + gameData.CourtHeight / 2f;
+            player.transform.position = new Vector3( player.transform.position.x, newY, newZ );
         }
     }
 }

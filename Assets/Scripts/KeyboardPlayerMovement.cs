@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 namespace Assets.Scripts {
-    public class KeyboardPlayerMovement : MonoBehaviour {
+    public class KeyboardPlayerMovement : BaseMovement {
         public float movementSpeed = .3f;
 
         // Update is called once per frame

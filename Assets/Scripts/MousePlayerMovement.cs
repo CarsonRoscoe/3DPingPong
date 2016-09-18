@@ -2,7 +2,7 @@
 using System.Collections;
 
 namespace Assets.Scripts {
-    public class MousePlayerMovement : MonoBehaviour {
+    public class MousePlayerMovement : BaseMovement {
         // Update is called once per frame
         void Update() {
             var gameData = GameDataManager.Instance;

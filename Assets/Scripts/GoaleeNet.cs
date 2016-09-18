@@ -12,7 +12,7 @@ namespace Assets.Scripts {
             var collider = collision.collider;
             if ( collider.tag == "Ball" ) {
                 var ballObject = collider.gameObject;
-                GameManager.Instance.PlayerScore( PlayerNumber == 1 ? 2 : 1 );
+                GameManager.Instance.PlayerScored( PlayerNumber == 1 ? 2 : 1 );
                 if (GameDataManager.Instance.GameInProgress) {
                     GameManager.Instance.ResetCourt( ballObject );
                 }

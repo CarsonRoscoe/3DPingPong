@@ -9,11 +9,7 @@ public class BallBehaviour : MonoBehaviour {
     private Rigidbody rigidBody;
 
     void Start() {
-        rigidBody = GetComponent<Rigidbody>();
-        var xForce = Random.value >= .5 ? XForceSpeed : -XForceSpeed;
-        var yForce = Random.value * YZForceSpeed - YZForceSpeed / 2;
-        var zForce = Random.value * YZForceSpeed - YZForceSpeed / 2;
-        rigidBody.AddForce( xForce, yForce, zForce );
+        RandomizeForce();
     }
 
     void OnCollisionEnter( Collision collision ) {
@@ -36,5 +32,14 @@ public class BallBehaviour : MonoBehaviour {
         else if ( rigidBody.velocity.x < 0 && rigidBody.velocity.x > -MinimumSpeed ) {
             rigidBody.AddForce( -5, 0, 0 );
         }
+    }
+
+    public void RandomizeForce() {
+        rigidBody = GetComponent<Rigidbody>();
+        rigidBody.velocity = Vector3.zero;
+        var xForce = Random.value >= .5 ? XForceSpeed : -XForceSpeed;
+        var yForce = Random.value * YZForceSpeed - YZForceSpeed / 2;
+        var zForce = Random.value * YZForceSpeed - YZForceSpeed / 2;
+        rigidBody.AddForce( xForce, yForce, zForce );
     }
 }

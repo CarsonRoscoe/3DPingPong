@@ -2,7 +2,7 @@
 using System.Collections;
 using Assets.Scripts;
 
-public class AIMovement : MonoBehaviour {
+public class AIMovement : BaseMovement {
     public Transform Ball;
     public float Speed = .1f;
     private GameDataManager gameData;
