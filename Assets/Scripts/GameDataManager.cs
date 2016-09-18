@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 namespace Assets.Scripts {
-    public enum MovementType { Keyboard, Mouse, Controller }
+    public enum MovementType { Keyboard, Mouse, Controller, AI }
 
     public class GameDataManager : MonoBehaviour {
         public static GameDataManager Instance;
@@ -14,15 +14,25 @@ namespace Assets.Scripts {
         public Transform RightWall;
         public Transform Ceiling;
         public Transform Floor;
+        public int MaxScore = 3;
 
+        [HideInInspector]
         public float MinimumCourtZ;
+        [HideInInspector]
         public float MaximumCourtZ;
+        [HideInInspector]
         public float MinimumCourtY;
+        [HideInInspector]
         public float MaximumCourtY;
+        [HideInInspector]
         public float CourtWidth;
+        [HideInInspector]
         public float CourtHeight;
+        [HideInInspector]
+        public bool GameInProgress;
 
-        public MovementType MovementType { get; set; }
+        public MovementType PlayerOneMovementType = MovementType.Keyboard;
+        public MovementType PlayerTwoMovementType = MovementType.AI;
 
         private int _playerOneScore;
         public int PlayerOneScore {

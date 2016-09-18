@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class BallBehaviour : MonoBehaviour {
+    public int MinimumSpeed = 20;
     public int XForceSpeed = 500;
     public int YZForceSpeed = 200;
 
@@ -25,6 +26,15 @@ public class BallBehaviour : MonoBehaviour {
             var forceSpeed = 300;
 
             rigidBody.AddForce( 0, yDifference * forceSpeed / colliderScale.y, zDifference * forceSpeed / colliderScale.z );
+        }
+    }
+
+    void Update() {
+        if (rigidBody.velocity.x > 0 && rigidBody.velocity.x < MinimumSpeed ) {
+            rigidBody.AddForce( 5, 0, 0 );
+        }
+        else if ( rigidBody.velocity.x < 0 && rigidBody.velocity.x > -MinimumSpeed ) {
+            rigidBody.AddForce( -5, 0, 0 );
         }
     }
 }

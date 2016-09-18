@@ -9,21 +9,12 @@ namespace Assets.Scripts {
         public int PlayerNumber = 1;
 
         void OnCollisionEnter( Collision collision ) {
-            Debug.Log( "Hit" );
             var collider = collision.collider;
             if ( collider.tag == "Ball" ) {
                 var ballObject = collider.gameObject;
-                switch ( PlayerNumber ) {
-                    case 1:
-                        GameManager.Instance.PlayerTwoScore();
-                        GameManager.Instance.ResetCourt( ballObject );
-                        break;
-                    case 2:
-                        GameManager.Instance.PlayerOneScore();
-                        GameManager.Instance.ResetCourt( ballObject );
-                        break;
-                    default:
-                        break;
+                GameManager.Instance.PlayerScore( PlayerNumber == 1 ? 2 : 1 );
+                if (GameDataManager.Instance.GameInProgress) {
+                    GameManager.Instance.ResetCourt( ballObject );
                 }
             }
         }

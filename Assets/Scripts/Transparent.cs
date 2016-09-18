@@ -6,13 +6,15 @@ using UnityEngine;
 
 namespace Assets.Scripts {
     public class Transparent : MonoBehaviour {
+        public bool IsTransparent = true;
 
-        void Update() {
+        void Start() {
+            SetTransparent( IsTransparent );
+        }
+
+        public void SetTransparent(bool isObjectTransparent) {
             foreach ( var renderer in gameObject.GetComponentsInChildren<Renderer>() ) {
-                var color = renderer.material.color;
-                color.a = .25f;
-                renderer.material.color = color;
-                //renderer.enabled = false;
+                renderer.enabled = !isObjectTransparent;
             }
         }
     }
