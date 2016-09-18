@@ -2,15 +2,16 @@
 using System.Collections;
 
 public class BallBehaviour : MonoBehaviour {
+    public int XForceSpeed = 500;
+    public int YZForceSpeed = 200;
+
     private Rigidbody rigidBody;
 
     void Start() {
         rigidBody = GetComponent<Rigidbody>();
-        var xForceSpeed = 500;
-        var yzForceSpeed = 200;
-        var xForce = Random.value >= .5 ? xForceSpeed : -xForceSpeed;
-        var yForce = Random.value * yzForceSpeed - yzForceSpeed / 2;
-        var zForce = Random.value * yzForceSpeed - yzForceSpeed / 2;
+        var xForce = Random.value >= .5 ? XForceSpeed : -XForceSpeed;
+        var yForce = Random.value * YZForceSpeed - YZForceSpeed / 2;
+        var zForce = Random.value * YZForceSpeed - YZForceSpeed / 2;
         rigidBody.AddForce( xForce, yForce, zForce );
     }
 

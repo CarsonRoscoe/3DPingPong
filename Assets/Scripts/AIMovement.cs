@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AIMovement : BasePaddleMovement {
+public class AIMovement : MonoBehaviour {
     public Transform Ball;
     public float Speed = .1f;
 

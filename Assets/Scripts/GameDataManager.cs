@@ -10,6 +10,18 @@ namespace Assets.Scripts {
     public class GameDataManager : MonoBehaviour {
         public static GameDataManager Instance;
 
+        public Transform LeftWall;
+        public Transform RightWall;
+        public Transform Ceiling;
+        public Transform Floor;
+
+        public float MinimumCourtZ;
+        public float MaximumCourtZ;
+        public float MinimumCourtY;
+        public float MaximumCourtY;
+        public float CourtWidth;
+        public float CourtHeight;
+
         public MovementType MovementType { get; set; }
 
         private int _playerOneScore;
@@ -44,6 +56,16 @@ namespace Assets.Scripts {
             else {
                 Destroy( gameObject );
             }
+        }
+
+        // Use this for initialization
+        void Start() {
+            MinimumCourtZ = LeftWall.position.z + ((transform.lossyScale.z) / 2 + .5f);
+            MaximumCourtZ = RightWall.position.z - ((transform.lossyScale.z) / 2 + .5f);
+            MinimumCourtY = Floor.position.y + ((transform.lossyScale.y) / 2 + .5f);
+            MaximumCourtY = Ceiling.position.y - ((transform.lossyScale.y) / 2 + .5f);
+            CourtWidth = MaximumCourtZ - MinimumCourtZ;
+            CourtHeight = MaximumCourtY - MinimumCourtY;
         }
     }
 }

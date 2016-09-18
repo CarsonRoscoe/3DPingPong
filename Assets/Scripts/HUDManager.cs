@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts {
     public class HUDManager : MonoBehaviour {
@@ -10,8 +11,8 @@ namespace Assets.Scripts {
 
         public GameObject PlayerOneScore;
         public GameObject PlayerTwoScore;
-        private TextMesh PlayerOneScoreText;
-        private TextMesh PlayerTwoScoreText;
+        private Text PlayerOneScoreText;
+        private Text PlayerTwoScoreText;
 
         void Awake() {
             if ( Instance == null ) {
@@ -23,8 +24,8 @@ namespace Assets.Scripts {
         }
 
         void Start() {
-            PlayerOneScoreText = PlayerOneScore.GetComponent<TextMesh>();
-            PlayerTwoScoreText = PlayerTwoScore.GetComponent<TextMesh>();
+            PlayerOneScoreText = PlayerOneScore.GetComponent<Text>();
+            PlayerTwoScoreText = PlayerTwoScore.GetComponent<Text>();
         }
 
         public void UpdateScores() {

@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MousePlayerMovement : BasePaddleMovement {
-    // Update is called once per frame
-    void Update() {
-        var widthPercent = Input.mousePosition.x / Screen.width;
-        var heightPerecent = Input.mousePosition.y / Screen.height;
+namespace Assets.Scripts {
+    public class MousePlayerMovement : MonoBehaviour {
+        // Update is called once per frame
+        void Update() {
+            var gameData = GameDataManager.Instance;
+            var widthPercent = Input.mousePosition.x / Screen.width;
+            var heightPerecent = Input.mousePosition.y / Screen.height;
 
-        var newZPosition = width * widthPercent + minWidth;
-        var newYPosition = height * heightPerecent + minHeight;
+            var newZPosition = gameData.CourtWidth * widthPercent + gameData.MinimumCourtZ;
+            var newYPosition = gameData.CourtHeight * heightPerecent + gameData.MinimumCourtY;
 
-        transform.position = new Vector3( transform.position.x, newYPosition, newZPosition );
+            transform.position = new Vector3( transform.position.x, newYPosition, newZPosition );
+        }
     }
 }
+
