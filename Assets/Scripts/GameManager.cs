@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts {
     public class GameManager : MonoBehaviour {
@@ -24,8 +25,18 @@ namespace Assets.Scripts {
         void Start() {
             if (Application.platform == RuntimePlatform.Android) {
                 GameDataManager.Instance.PlayerOneMovementType = MovementType.Mouse;
+            } else {
+                GameDataManager.Instance.PlayerOneMovementType = MovementType.KeyboardOrController;
+                GameObject.Find( "Pause" ).SetActive( false );
             }
+            GameDataManager.Instance.PlayerTwoMovementType = MovementType.AI;
             StartGame();
+        }
+
+        void Update() {
+            if ( Input.GetKeyDown( KeyCode.Escape ) || Input.GetKeyDown(KeyCode.Joystick1Button7)) {
+                TogglePauseGame();
+            }
         }
 
         public void ResetScores() {
@@ -57,20 +68,57 @@ namespace Assets.Scripts {
 
         public void TogglePauseGame() {
             HUDManager.Instance.ToggleInGameMenu();
+            ConsoleManager.Instance.ToggleConsoleVisibility();
+            GameDataManager.Instance.IsPaused = !GameDataManager.Instance.IsPaused;
+        }
+
+        public MovementType GetMovementType(int controlType) {
+            MovementType movementType = MovementType.Mouse;
+            switch ( controlType ) {
+                case 0:
+                    movementType = MovementType.Mouse;
+                    break;
+                case 1:
+                    movementType = MovementType.KeyboardOrController;
+                    break;
+                case 2:
+                    movementType = MovementType.AI;
+                    break;
+            }
+            return movementType;
+        }
+
+        public void ChangePlayerControls(int player) {
+            if (player == 1) {
+                var dropDown = GameObject.Find( "PlayerOneControls" ).GetComponent<Dropdown>();
+                GameDataManager.Instance.PlayerOneMovementType = GetMovementType( dropDown.value );
+                AddController( PlayerOne.gameObject, GameDataManager.Instance.PlayerOneMovementType, player );
+            } else {
+                var dropDown = GameObject.Find( "PlayerTwoControls" ).GetComponent<Dropdown>();
+                GameDataManager.Instance.PlayerTwoMovementType = GetMovementType( dropDown.value );
+                AddController( PlayerTwo.gameObject, GameDataManager.Instance.PlayerTwoMovementType, player );
+            }
         }
 
         public void StartGame() {
-            AddController( PlayerOne.gameObject, GameDataManager.Instance.PlayerOneMovementType );
-            AddController( PlayerTwo.gameObject, GameDataManager.Instance.PlayerTwoMovementType );
+            AddController( PlayerOne.gameObject, GameDataManager.Instance.PlayerOneMovementType, 1 );
+            AddController( PlayerTwo.gameObject, GameDataManager.Instance.PlayerTwoMovementType, 2 );
             GameDataManager.Instance.GameInProgress = true;
             HUDManager.Instance.StartGame();
+            CameraManager.Instance.CapturePositions();
+        }
+
+        public void ChangeTurns() {
+            if (GameDataManager.Instance.IsPVP) {
+                CameraManager.Instance.SwapPlayer();
+            }
         }
 
         public void RestartGame() {
-            StartGame();
             CenterPlayer( PlayerOne.gameObject );
             CenterPlayer( PlayerTwo.gameObject );
             ResetCourt( Ball.gameObject );
+            StartGame();
         }
 
         public void EndGame(int winningPlayer) {
@@ -92,25 +140,25 @@ namespace Assets.Scripts {
                     var newBallX = 0f;
 
                     ball.transform.position = new Vector3( newBallX, newBallY, newBallZ );
-
-                    ballBehaviour.RandomizeForce();
+                    
+                    ballBehaviour.RandomizeForce(gameData.WhichPlayerScoredLast);
                 }
             }
         }
 
-        private void AddController(GameObject player, MovementType movementType) {
+        private void AddController(GameObject player, MovementType movementType, int playerNumber) {
             var playerMovement = player.GetComponent<BaseMovement>();
             if ( playerMovement != null ) {
                 Destroy( playerMovement );
             }
             switch ( movementType ) {
-                case MovementType.Controller:
-                    break;
-                case MovementType.Keyboard:
+                case MovementType.KeyboardOrController:
                     player.AddComponent( typeof( KeyboardPlayerMovement ) );
+                    player.GetComponent<KeyboardPlayerMovement>().PlayerNumber = playerNumber;
                     break;
                 case MovementType.Mouse:
                     player.AddComponent( typeof( MousePlayerMovement ) );
+                    player.GetComponent<MousePlayerMovement>().PlayerNumber = playerNumber;
                     break;
                 case MovementType.AI:
                     var AI = player.AddComponent( typeof( AIMovement ) ) as AIMovement;

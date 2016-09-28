@@ -5,5 +5,7 @@ using System.Text;
 using UnityEngine;
 
 namespace Assets.Scripts {
-    public abstract class BaseMovement : MonoBehaviour {}
+    public abstract class BaseMovement : PausableObject {
+        public int PlayerNumber;
+    }
 }

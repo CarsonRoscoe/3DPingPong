@@ -6,16 +6,18 @@ using UnityEngine;
 
 namespace Assets.Scripts {
     public class KeyboardPlayerMovement : BaseMovement {
-        public float movementSpeed = .3f;
+        public float MovementSpeed = .5f;
 
         // Update is called once per frame
-        void Update() {
+        protected override void OnUpdate() {
             var gameData = GameDataManager.Instance;
-            var newYPosition = transform.position.y + Input.GetAxis( "Vertical" ) * movementSpeed;
+
+            var newYPosition = transform.position.y + Input.GetAxis( "Vertical" ) * MovementSpeed;
             newYPosition = Mathf.Min( newYPosition, gameData.MaximumCourtY );
             newYPosition = Mathf.Max( newYPosition, gameData.MinimumCourtY );
 
-            var newZPosition = transform.position.z + Input.GetAxis( "Horizontal" ) * movementSpeed;
+            var horizontalDirection = Input.GetAxis( "Horizontal" ) * (PlayerNumber == 1 ? 1 : -1);
+            var newZPosition = transform.position.z + horizontalDirection * MovementSpeed;
             newZPosition = Mathf.Min( newZPosition, gameData.MaximumCourtZ );
             newZPosition = Mathf.Max( newZPosition, gameData.MinimumCourtZ );
 

@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 namespace Assets.Scripts {
-    public enum MovementType { Keyboard, Mouse, Controller, AI }
+    public enum MovementType { Mouse, KeyboardOrController, AI }
 
     public class GameDataManager : MonoBehaviour {
         public static GameDataManager Instance;
@@ -30,9 +30,34 @@ namespace Assets.Scripts {
         public float CourtHeight;
         [HideInInspector]
         public bool GameInProgress;
+        [HideInInspector]
+        public bool IsPVP;
+        [HideInInspector]
+        public int WhichPlayerScoredLast;
+        [HideInInspector]
+        public bool IsPaused;
 
-        public MovementType PlayerOneMovementType = MovementType.Keyboard;
-        public MovementType PlayerTwoMovementType = MovementType.AI;
+        private MovementType _playerOneMovementType;
+        public MovementType PlayerOneMovementType {
+            get {
+                return _playerOneMovementType;
+            }
+            set {
+                _playerOneMovementType = value;
+                IsPVP = DetermineIfPVP( _playerOneMovementType, PlayerTwoMovementType );
+            }
+        }
+
+        private MovementType _playerTwoMovementType;
+        public MovementType PlayerTwoMovementType {
+            get {
+                return _playerTwoMovementType;
+            }
+            set {
+                _playerTwoMovementType = value;
+                IsPVP = DetermineIfPVP( PlayerOneMovementType, _playerTwoMovementType );
+            }
+        }
 
         private int _playerOneScore;
         public int PlayerOneScore {
@@ -43,6 +68,7 @@ namespace Assets.Scripts {
                 if ( value >= 0 ) {
                     _playerOneScore = value;
                 }
+                WhichPlayerScoredLast = 1;
             }
         }
 
@@ -55,6 +81,7 @@ namespace Assets.Scripts {
                 if (value >= 0) {
                     _playerTwoScore = value;
                 }
+                WhichPlayerScoredLast = 2;
             }
         }
 
@@ -76,6 +103,11 @@ namespace Assets.Scripts {
             MaximumCourtY = Ceiling.position.y - ((transform.lossyScale.y) / 2 + .5f);
             CourtWidth = MaximumCourtZ - MinimumCourtZ;
             CourtHeight = MaximumCourtY - MinimumCourtY;
+            IsPaused = false;
+        }
+
+        bool DetermineIfPVP(MovementType playerOne, MovementType playerTwo) {
+            return !(playerOne == MovementType.AI || playerTwo == MovementType.AI);
         }
     }
 }

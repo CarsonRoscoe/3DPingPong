@@ -16,6 +16,7 @@ namespace Assets.Scripts {
             foreach ( var renderer in gameObject.GetComponentsInChildren<Renderer>() ) {
                 renderer.enabled = !isObjectTransparent;
             }
+            IsTransparent = isObjectTransparent;
         }
     }
 }
