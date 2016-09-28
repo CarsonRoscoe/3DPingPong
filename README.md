@@ -66,9 +66,9 @@ Valid values are:
 - Integer values
 
 Example commands are as follows:
-Background Color Red
-LeftWall Color FF00FF
-Ball Color FF00FFAA
-Ball Speed Slow
-Ball Speed -5
-Rules MaxScore 10
+- Background Color Red
+- LeftWall Color FF00FF
+- Ball Color FF00FFAA
+- Ball Speed Slow
+- Ball Speed -5
+- Rules MaxScore 10
